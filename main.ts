@@ -23,11 +23,18 @@ const firestore = firebase.firestore();
 const servers = {
     iceServers: [
         {
+            urls: ["stun:eu-turn2.xirsys.com"]
+        }, {
+            username: env.USERNAME_TURN,
+            credential: env.PWD_TURN,
             urls: [
-                'turn:79.17.189.6:3478', 'turn:79.17.189.6:3478?transport=udp', 'turn:79.17.189.6:5349', 'turn:79.17.189.6:5349?transport=udp'
-            ],
-            username: "nobody",
-            credential: "nogroup"
+                "turn:eu-turn2.xirsys.com:80?transport=udp",
+                "turn:eu-turn2.xirsys.com:3478?transport=udp",
+                "turn:eu-turn2.xirsys.com:80?transport=tcp",
+                "turn:eu-turn2.xirsys.com:3478?transport=tcp",
+                "turns:eu-turn2.xirsys.com:443?transport=tcp",
+                "turns:eu-turn2.xirsys.com:5349?transport=tcp"
+            ]
         }
     ],
     iceCandidatePoolSize: 10
