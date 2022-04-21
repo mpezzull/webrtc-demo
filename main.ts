@@ -2,18 +2,17 @@ import './style.css';
 
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-
-require('dotenv').config();
+import env from './.environment';
 
 
 const firebaseConfig = {
-    apiKey: process.env.API_KEY,
-    authDomain: process.env.AUTH_DOMAIN,
-    projectId: process.env.PROJECT_ID,
-    storageBucket: process.env.STORAGE_BUCKET,
-    messagingSenderId: process.env.MESSAGING_SENDER_ID,
-    appId: process.env.APP_ID,
-    measurementId: process.env.MEASUREMENT_ID,
+    apiKey: env.API_KEY,
+    authDomain: env.AUTH_DOMAIN,
+    projectId: env.PROJECT_ID,
+    storageBucket: env.STORAGE_BUCKET,
+    messagingSenderId: env.MESSAGING_SENDER_ID,
+    appId: env.APP_ID,
+    measurementId: env.MEASUREMENT_ID
 };
 
 if (!firebase.apps.length) {
@@ -24,8 +23,12 @@ const firestore = firebase.firestore();
 const servers = {
     iceServers: [
         {
-            urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302']
-        },
+            urls: [
+                'turn:79.17.189.6:3478', 'turn:79.17.189.6:3478?transport=udp', 'turn:79.17.189.6:5349', 'turn:79.17.189.6:5349?transport=udp'
+            ],
+            username: "nobody",
+            credential: "nogroup"
+        }
     ],
     iceCandidatePoolSize: 10
 };
@@ -36,13 +39,13 @@ let localStream = null;
 let remoteStream = null;
 
 // HTML elements
-const webcamButton = document.getElementById('webcamButton') as HTMLButtonElement;
-const webcamVideo = document.getElementById('webcamVideo') as HTMLVideoElement;
-const callButton = document.getElementById('callButton') as HTMLButtonElement;
-const callInput = document.getElementById('callInput') as HTMLInputElement;
-const answerButton = document.getElementById('answerButton') as HTMLButtonElement;
-const remoteVideo = document.getElementById('remoteVideo') as HTMLVideoElement;
-const hangupButton = document.getElementById('hangupButton') as HTMLButtonElement;
+const webcamButton = document.getElementById('webcamButton')as HTMLButtonElement;
+const webcamVideo = document.getElementById('webcamVideo')as HTMLVideoElement;
+const callButton = document.getElementById('callButton')as HTMLButtonElement;
+const callInput = document.getElementById('callInput')as HTMLInputElement;
+const answerButton = document.getElementById('answerButton')as HTMLButtonElement;
+const remoteVideo = document.getElementById('remoteVideo')as HTMLVideoElement;
+const hangupButton = document.getElementById('hangupButton')as HTMLButtonElement;
 
 // 1. Setup media sources
 
@@ -181,7 +184,7 @@ hangupButton.onclick = async () => {
         await candidate.ref.delete();
     });
     await callDoc.delete();
-	
+
     webcamButton.disabled = false;
-	document.location.reload();
+    document.location.reload();
 };
